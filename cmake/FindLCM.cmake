@@ -9,7 +9,7 @@
 
 find_package(lcm QUIET CONFIG)
 if(lcm_FOUND)
-  set(LCM_LIBRARIES lcm::lcm)
+  set(LCM_LIBRARIES lcm)
   return()
 endif()
 
