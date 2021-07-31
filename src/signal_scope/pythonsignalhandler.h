@@ -4,20 +4,18 @@
 #include "signalhandler.h"
 #include "signaldescription.h"
 #include "signaldata.h"
-
+#include <QVector>
 #include <PythonQt.h>
 
 class SignalData;
 class SignalDescription;
-
 
 class PythonSignalHandler : public SignalHandler
 {
   Q_OBJECT
 
 public:
-
-  PythonSignalHandler(SignalDescription* signalDescription, PythonQtObjectPtr callback) : SignalHandler(signalDescription)
+  PythonSignalHandler(SignalDescription *signalDescription, PythonQtObjectPtr callback) : SignalHandler(signalDescription)
   {
     mCallback = callback;
   }
@@ -27,23 +25,43 @@ public:
     return mDescription.mFieldName;
   }
 
-  void onNewMessage(const QVariant& message)
+  void onNewMessage(const QVariant &message)
   {
     double timeNow;
     double signalValue;
+    QVector<double> timeSeq;
+    QVector<double> signalSeq;
 
-    bool valid = this->extractSignalData(message, timeNow, signalValue);
-    if (valid)
+    if (!mDescription.mSignalSeq) // if a signal, append it to the list
     {
-      mSignalData->appendSample(timeNow, signalValue);
+      bool valid = this->extractSignalData(message, timeNow, signalValue);
+      if (valid)
+      {
+        mSignalData->appendSample(timeNow, signalValue);
+      }
+      else
+      {
+        mSignalData->flagMessageError();
+      }
     }
-    else
+    else // if a signal sequence, clear the original list and append the new one
     {
-      mSignalData->flagMessageError();
+      bool valid = this->extractSignalData(message, timeSeq, signalSeq);
+      if (valid)
+      {
+        mSignalData->clear();
+        mSignalData->appendSample(timeSeq, signalSeq);
+      }
+      else
+      {
+        mSignalData->flagMessageError();
+      }
+      
     }
+
   }
 
-  virtual bool extractSignalData(const QVariant& message, double& timeNow, double& signalValue)
+  virtual bool extractSignalData(const QVariant &message, double &timeNow, double &signalValue)
   {
     QVariantList args;
     args << message;
@@ -52,7 +70,7 @@ public:
     QList<QVariant> values = result.toList();
     if (values.size() == 2)
     {
-      timeNow = SignalHandlerFactory::instance().getOffsetTime(static_cast<int64_t>(values[0].toDouble()*1e6));
+      timeNow = SignalHandlerFactory::instance().getOffsetTime(static_cast<int64_t>(values[0].toDouble() * 1e6));
       signalValue = values[1].value<double>();
       //std::cout << timeNow << ", " << signalValue << std::endl;
       return true;
@@ -65,15 +83,51 @@ public:
     return true;
   }
 
-  virtual bool extractSignalData(const lcm::ReceiveBuffer* rbuf, double& timeNow, double& signalValue)
+  // Overload extractSignalData to hold signal sequence
+  virtual bool extractSignalData(const QVariant &message, QVector<double> &timeSeq, QVector<double> &signalSeq)
+  {
+    QVariantList args;
+    args << message; // message includes the LCM-type info
+
+    QVariant result = PythonQt::self()->call(mCallback, args);
+    QList<QVariant> values = result.toList();
+    printf("values[0] type = %d \n", values[0].userType());
+    printf("values[1] type = %d \n", values[1].userType());
+
+    if (values.size() == 2)
+    {
+      QList<QVariant> timeList = values[0].toList();
+      QList<QVariant> signalList = values[1].toList();
+      if (timeList.length() != signalList.length())
+      {
+        printf("length of timeSeq and signalSeq doesn't match \n");
+        return false;
+      }
+      printf("length of time sequence = %d \n", timeList.length());
+
+      for (int i = 0; i < timeList.length(); i++)
+      {
+        timeSeq.append(SignalHandlerFactory::instance().getOffsetTime(static_cast<int64_t>(timeList[i].toDouble() * 1e6)));
+        signalSeq.append(signalList[i].value<double>());
+      }
+
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+
+    return true;
+  }
+
+  virtual bool extractSignalData(const lcm::ReceiveBuffer *rbuf, double &timeNow, double &signalValue)
   {
     return false;
   }
 
- protected:
-
+protected:
   PythonQtObjectPtr mCallback;
 };
-
 
 #endif

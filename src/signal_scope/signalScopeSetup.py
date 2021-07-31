@@ -132,7 +132,8 @@ def createSignalFunction(timeLookup, valueLookup):
     v = valueLookup._getResolverFunction()
 
     def func(msg):
-        return t(msg)*1e-6, v(msg)
+        # return t(msg)*1e-6, v(msg)
+        return t(msg), v(msg)
     func.__doc__ = v.__doc__
     return func
 
@@ -180,7 +181,7 @@ def removePlots():
     _mainWindow.onRemoveAllPlots()
 
 
-def addSignalFunction(channel, signalFunction, plot=None, color=None, wrap=True, label=None):
+def addSignalFunction(channel, signalFunction, signalSeq=None, plot=None, color=None, wrap=True, label=None):
 
     if plot is None:
         plot = getPlot()
@@ -200,10 +201,13 @@ def addSignalFunction(channel, signalFunction, plot=None, color=None, wrap=True,
     else:
         _signalFunction = signalFunction
 
-    _mainWindow.addPythonSignal(plot, [channel, _signalFunction, label or signalFunction.__doc__, color])
+    if signalSeq is None:
+        signalSeq = False
+
+    _mainWindow.addPythonSignal(plot, [channel, _signalFunction, label or signalFunction.__doc__, color, signalSeq])
 
 
-def addSignalFunctions(channel, signalFunction, keys, keyLookup=None, plot=None, colors=None, labels=None):
+def addSignalFunctions(channel, signalFunction, keys, signalSeqs=None, keyLookup=None, plot=None, colors=None, labels=None):
     
     def func(key, keyStr):
         def f (msg):
@@ -224,8 +228,13 @@ def addSignalFunctions(channel, signalFunction, keys, keyLookup=None, plot=None,
         keyStr = str(key)        
         if keyLookup is not None:
             key = keyLookup[key]
+            
+        if signalSeqs is not None:
+            signalSeq = signalSeqs[key]
+        else:
+            signalSeq = None
 
-        addSignalFunction(channel, func(key,keyStr), plot=plot, color=color, label=label)
+        addSignalFunction(channel, func(key,keyStr), signalSeq=signalSeq, plot=plot, color=color, label=label)
 
 
 
@@ -233,6 +242,11 @@ def addSignal(channel, timeLookup, valueLookup, plot=None, color=None, label=Non
 
     signalFunction = createSignalFunction(timeLookup, valueLookup)
     addSignalFunction(channel, signalFunction, plot=plot, color=color, wrap=False, label=label)
+
+def addSignalSequence(channel, timeLookup, valueLookup, plot=None, color=None, label=None):
+
+    signalFunction = createSignalFunction(timeLookup, valueLookup)
+    addSignalFunction(channel, signalFunction, signalSeq=True, plot=plot, color=color, wrap=False, label=label)
 
 
 def addSignals(channel, timeLookup, valueLookup, keys, keyLookup=None, plot=None, colors=None, labels=None):

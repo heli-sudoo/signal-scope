@@ -244,7 +244,7 @@ void MainWindow::initPython()
 PythonSignalHandler* MainWindow::addPythonSignal(PlotWidget* plot, QVariant signalData)
 {
   QList<QVariant> signalDataList = signalData.toList();
-  if (signalDataList.length() != 4)
+  if (signalDataList.length() != 5)
   {
     printf("incorrect args passed to addPythonSignal\n");
     return 0;
@@ -258,6 +258,7 @@ PythonSignalHandler* MainWindow::addPythonSignal(PlotWidget* plot, QVariant sign
   signalDescription.mChannel = channel;
   signalDescription.mFieldName = fieldName;
   signalDescription.mColor = signalDataList[3].value<QColor>();
+  signalDescription.mSignalSeq = signalDataList[4].value<bool>();
 
   PythonSignalHandler* signalHandler = new PythonSignalHandler(&signalDescription, callback);
   plot->addSignal(signalHandler);

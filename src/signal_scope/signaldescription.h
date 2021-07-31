@@ -20,6 +20,7 @@ public:
   QString mFieldName;
   QColor mColor;
   QList<QString> mArrayKeys;
+  bool mSignalSeq = false; // false -> signal seqeunce true -> signal
 
   QString descriptionString() const
   {

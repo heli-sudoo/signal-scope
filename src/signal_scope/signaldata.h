@@ -2,7 +2,7 @@
 #define _SIGNAL_DATA_H_
 
 #include <qrect.h>
-
+#include <QVector>
 class SignalData
 {
 public:
@@ -11,6 +11,7 @@ public:
     virtual ~SignalData();
 
     void appendSample(double x, double y);
+    void appendSample(QVector<double>&x, QVector<double>&y); // overload appendSample to append QVector
     void updateValues();
 
     int size() const;

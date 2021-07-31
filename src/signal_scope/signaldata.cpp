@@ -103,6 +103,15 @@ void SignalData::appendSample(double x, double y)
   d_data->mutex.unlock();
 }
 
+void SignalData::appendSample(QVector<double>&x, QVector<double>&y)
+{
+  d_data->mutex.lock();
+  d_data->pendingxvalues+=x;
+  d_data->pendingyvalues+=y;
+  d_data->fpsCounter.update();
+  d_data->mutex.unlock();
+}
+
 void SignalData::clear()
 {
   d_data->mutex.lock();
