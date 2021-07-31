@@ -8,23 +8,23 @@
 
 #define pi 3.1415926
 
-int publish_short();
-int publish_long();
+int publish_signal();
+int publish_signalSeq();
 int main(int argn, char *argv[])
 {
     if (argn <= 1)
-        return publish_short();
+        return publish_signal();
 
     std::string argin = std::string(argv[1]);
-    if (argin == "long")
-        return publish_long();
+    if (argin == "seq")
+        return publish_signalSeq();
     else
-        return publish_short();
+        return publish_signal();
 }
 
-int publish_short()
+int publish_signal()
 {
-    printf("execute publish_short() \n");
+    printf("execute publish_signal \n");
     lcm::LCM lcm;
     if (!lcm.good())
         return 1;
@@ -43,9 +43,9 @@ int publish_short()
     }
 }
 
-int publish_long()
+int publish_signalSeq()
 {
-    printf("execute publish_long() \n");
+    printf("execute publish_signalSeq() \n");
     lcm::LCM lcm;
     if (!lcm.good())
         return 1;
