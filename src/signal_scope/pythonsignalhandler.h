@@ -91,8 +91,6 @@ public:
 
     QVariant result = PythonQt::self()->call(mCallback, args);
     QList<QVariant> values = result.toList();
-    printf("values[0] type = %d \n", values[0].userType());
-    printf("values[1] type = %d \n", values[1].userType());
 
     if (values.size() == 2)
     {
@@ -103,7 +101,6 @@ public:
         printf("length of timeSeq and signalSeq doesn't match \n");
         return false;
       }
-      printf("length of time sequence = %d \n", timeList.length());
 
       for (int i = 0; i < timeList.length(); i++)
       {
