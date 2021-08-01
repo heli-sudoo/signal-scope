@@ -53,14 +53,14 @@ int publish_signalSeq()
     test_signal_sequence_lcmt signalSeq;
     for (int i = 0; i < sizeof(signalSeq.timestep)/sizeof(float); i++)
     {
-        signalSeq.timestep[i] = 0.01 *i; // unit microsecond
+        signalSeq.timestep[i] = 0.01 *i*1e06; // unit microsecond
     }
     float f = 1; // frequency
     while (true)
     {
         for (int i = 0; i < sizeof(signalSeq.timestep)/sizeof(float); i++)
         {
-            float t = signalSeq.timestep[i];
+            float t = signalSeq.timestep[i]*1e-06;
             signalSeq.pos[i] = sin(2*pi*f*t);
         }        
         lcm.publish("MPCPlan", &signalSeq);
