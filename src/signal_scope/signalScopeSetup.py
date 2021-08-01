@@ -133,7 +133,7 @@ def createSignalFunction(timeLookup, valueLookup):
 
     def func(msg):
         # return t(msg)*1e-6, v(msg)
-        return t(msg), v(msg)
+        return tuple(ti*1e-6 for ti in t(msg)), v(msg)
     func.__doc__ = v.__doc__
     return func
 
