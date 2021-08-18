@@ -1,0 +1,1 @@
+lcmtypes/test_signal_lcmt.class lcmtypes/test_signal_sequence_lcmt.class

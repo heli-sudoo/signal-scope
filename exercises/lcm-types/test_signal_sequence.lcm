@@ -1,0 +1,7 @@
+struct test_signal_sequence_lcmt {
+    float pos[100];
+    float rpy[100];
+    float q_knee[100];
+    float q_hip[100];
+    float timestep[100];
+}
