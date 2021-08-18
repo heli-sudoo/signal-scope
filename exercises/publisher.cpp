@@ -64,7 +64,7 @@ int publish_signalSeq()
             signalSeq.pos[i] = sin(2*pi*f*t);
         }        
         lcm.publish("MPCPlan", &signalSeq);
-        sleep(10); // publish every 10 s
+        sleep(1); // publish every 10 s
         f++; // increase frequency by 1
     }
 }

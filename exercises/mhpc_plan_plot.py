@@ -1,6 +1,8 @@
 
 # This reads every .py file in the given directory and catalogs
 # everything that is an lcm type python definition file.
+
+
 findLCMTypes(os.path.expanduser('lcm-types/python'))
 
 
@@ -11,3 +13,5 @@ findLCMModules(os.path.expanduser('lcm-types/python'))
 p = addPlot()
 
 addSignalSequence("MPCPlan", msg.timestep, msg.pos, plot = p)
+
+setFormatOptions(curveStyle='lines')
