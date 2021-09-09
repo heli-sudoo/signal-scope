@@ -238,7 +238,6 @@ def addSignalFunctions(channel, signalFunction, keys, signalSeqs=None, keyLookup
         addSignalFunction(channel, func(key,keyStr), signalSeq=signalSeq, plot=plot, color=color, label=label)
 
 
-
 def addSignal(channel, timeLookup, valueLookup, plot=None, color=None, label=None):
 
     signalFunction = createSignalFunction(timeLookup, valueLookup)
@@ -248,6 +247,20 @@ def addSignalSequence(channel, timeLookup, valueLookup, plot=None, color=None, l
 
     signalFunction = createSignalFunction(timeLookup, valueLookup)
     addSignalFunction(channel, signalFunction, signalSeq=True, plot=plot, color=color, wrap=False, label=label)
+
+def addSignalSequences(channel, timeLookup, valueLookup, keys, keyLookup=None, plot=None, colors=None, labels=None):
+    if colors is None:
+        colors = [None] * len(keys)
+    
+    if labels is None:
+        labels = [None] * len(keys)
+    
+    for key, color, label in zip(keys, colors, labels):
+
+        if keyLookup is not None:
+            key = keyLookup[key]
+
+        addSignalSequence(channel, timeLookup, valueLookup[key], plot=plot, color=color, label=label)
 
 
 def addSignals(channel, timeLookup, valueLookup, keys, keyLookup=None, plot=None, colors=None, labels=None):
