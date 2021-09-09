@@ -11,7 +11,7 @@ import lcm.lcm.*;
  
 public final class test_signal_sequence_lcmt implements lcm.lcm.LCMEncodable
 {
-    public float pos[];
+    public float pos[][];
     public float rpy[];
     public float q_knee[];
     public float q_hip[];
@@ -19,7 +19,7 @@ public final class test_signal_sequence_lcmt implements lcm.lcm.LCMEncodable
  
     public test_signal_sequence_lcmt()
     {
-        pos = new float[100];
+        pos = new float[3][100];
         rpy = new float[100];
         q_knee = new float[100];
         q_hip = new float[100];
@@ -27,7 +27,7 @@ public final class test_signal_sequence_lcmt implements lcm.lcm.LCMEncodable
     }
  
     public static final long LCM_FINGERPRINT;
-    public static final long LCM_FINGERPRINT_BASE = 0x6f00e04668c1232cL;
+    public static final long LCM_FINGERPRINT_BASE = 0x3acb24f475895c71L;
  
     static {
         LCM_FINGERPRINT = _hashRecursive(new ArrayList<Class<?>>());
@@ -53,8 +53,10 @@ public final class test_signal_sequence_lcmt implements lcm.lcm.LCMEncodable
  
     public void _encodeRecursive(DataOutput outs) throws IOException
     {
-        for (int a = 0; a < 100; a++) {
-            outs.writeFloat(this.pos[a]); 
+        for (int a = 0; a < 3; a++) {
+            for (int b = 0; b < 100; b++) {
+                outs.writeFloat(this.pos[a][b]); 
+            }
         }
  
         for (int a = 0; a < 100; a++) {
@@ -97,9 +99,11 @@ public final class test_signal_sequence_lcmt implements lcm.lcm.LCMEncodable
  
     public void _decodeRecursive(DataInput ins) throws IOException
     {
-        this.pos = new float[(int) 100];
-        for (int a = 0; a < 100; a++) {
-            this.pos[a] = ins.readFloat();
+        this.pos = new float[(int) 3][(int) 100];
+        for (int a = 0; a < 3; a++) {
+            for (int b = 0; b < 100; b++) {
+                this.pos[a][b] = ins.readFloat();
+            }
         }
  
         this.rpy = new float[(int) 100];
@@ -127,8 +131,10 @@ public final class test_signal_sequence_lcmt implements lcm.lcm.LCMEncodable
     public lcmtypes.test_signal_sequence_lcmt copy()
     {
         lcmtypes.test_signal_sequence_lcmt outobj = new lcmtypes.test_signal_sequence_lcmt();
-        outobj.pos = new float[(int) 100];
-        System.arraycopy(this.pos, 0, outobj.pos, 0, 100); 
+        outobj.pos = new float[(int) 3][(int) 100];
+        for (int a = 0; a < 3; a++) {
+            System.arraycopy(this.pos[a], 0, outobj.pos[a], 0, 100);        }
+ 
         outobj.rpy = new float[(int) 100];
         System.arraycopy(this.rpy, 0, outobj.rpy, 0, 100); 
         outobj.q_knee = new float[(int) 100];

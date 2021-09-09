@@ -14,7 +14,7 @@
 class test_signal_sequence_lcmt
 {
     public:
-        float      pos[100];
+        float      pos[3][100];
 
         float      rpy[100];
 
@@ -120,8 +120,10 @@ int test_signal_sequence_lcmt::_encodeNoHash(void *buf, int offset, int maxlen) 
 {
     int pos = 0, tlen;
 
-    tlen = __float_encode_array(buf, offset + pos, maxlen - pos, &this->pos[0], 100);
-    if(tlen < 0) return tlen; else pos += tlen;
+    for (int a0 = 0; a0 < 3; a0++) {
+        tlen = __float_encode_array(buf, offset + pos, maxlen - pos, &this->pos[a0][0], 100);
+        if(tlen < 0) return tlen; else pos += tlen;
+    }
 
     tlen = __float_encode_array(buf, offset + pos, maxlen - pos, &this->rpy[0], 100);
     if(tlen < 0) return tlen; else pos += tlen;
@@ -142,8 +144,10 @@ int test_signal_sequence_lcmt::_decodeNoHash(const void *buf, int offset, int ma
 {
     int pos = 0, tlen;
 
-    tlen = __float_decode_array(buf, offset + pos, maxlen - pos, &this->pos[0], 100);
-    if(tlen < 0) return tlen; else pos += tlen;
+    for (int a0 = 0; a0 < 3; a0++) {
+        tlen = __float_decode_array(buf, offset + pos, maxlen - pos, &this->pos[a0][0], 100);
+        if(tlen < 0) return tlen; else pos += tlen;
+    }
 
     tlen = __float_decode_array(buf, offset + pos, maxlen - pos, &this->rpy[0], 100);
     if(tlen < 0) return tlen; else pos += tlen;
@@ -163,7 +167,7 @@ int test_signal_sequence_lcmt::_decodeNoHash(const void *buf, int offset, int ma
 int test_signal_sequence_lcmt::_getEncodedSizeNoHash() const
 {
     int enc_size = 0;
-    enc_size += __float_encoded_array_size(NULL, 100);
+    enc_size += 3 * __float_encoded_array_size(NULL, 100);
     enc_size += __float_encoded_array_size(NULL, 100);
     enc_size += __float_encoded_array_size(NULL, 100);
     enc_size += __float_encoded_array_size(NULL, 100);
@@ -173,7 +177,7 @@ int test_signal_sequence_lcmt::_getEncodedSizeNoHash() const
 
 uint64_t test_signal_sequence_lcmt::_computeHash(const __lcm_hash_ptr *)
 {
-    uint64_t hash = 0x6f00e04668c1232cLL;
+    uint64_t hash = 0x3acb24f475895c71LL;
     return (hash<<1) + ((hash>>63)&1);
 }
 

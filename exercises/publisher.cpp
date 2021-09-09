@@ -61,7 +61,9 @@ int publish_signalSeq()
         for (int i = 0; i < sizeof(signalSeq.timestep)/sizeof(float); i++)
         {
             float t = signalSeq.timestep[i]*1e-06;
-            signalSeq.pos[i] = sin(2*pi*f*t);
+            signalSeq.pos[0][i] = sin(2*pi*f*t);
+            signalSeq.pos[1][i] = sin(2*pi*f*t) - 1;
+            signalSeq.pos[2][i] = sin(2*pi*f*t) + 1;
         }        
         lcm.publish("MPCPlan", &signalSeq);
         sleep(1); // publish every 10 s

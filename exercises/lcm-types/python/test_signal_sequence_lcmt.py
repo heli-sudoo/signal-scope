@@ -14,10 +14,10 @@ class test_signal_sequence_lcmt(object):
 
     __typenames__ = ["float", "float", "float", "float", "float"]
 
-    __dimensions__ = [[100], [100], [100], [100], [100]]
+    __dimensions__ = [[3, 100], [100], [100], [100], [100]]
 
     def __init__(self):
-        self.pos = [ 0.0 for dim0 in range(100) ]
+        self.pos = [ [ 0.0 for dim1 in range(100) ] for dim0 in range(3) ]
         self.rpy = [ 0.0 for dim0 in range(100) ]
         self.q_knee = [ 0.0 for dim0 in range(100) ]
         self.q_hip = [ 0.0 for dim0 in range(100) ]
@@ -30,7 +30,8 @@ class test_signal_sequence_lcmt(object):
         return buf.getvalue()
 
     def _encode_one(self, buf):
-        buf.write(struct.pack('>100f', *self.pos[:100]))
+        for i0 in range(3):
+            buf.write(struct.pack('>100f', *self.pos[i0][:100]))
         buf.write(struct.pack('>100f', *self.rpy[:100]))
         buf.write(struct.pack('>100f', *self.q_knee[:100]))
         buf.write(struct.pack('>100f', *self.q_hip[:100]))
@@ -48,7 +49,9 @@ class test_signal_sequence_lcmt(object):
 
     def _decode_one(buf):
         self = test_signal_sequence_lcmt()
-        self.pos = struct.unpack('>100f', buf.read(400))
+        self.pos = []
+        for i0 in range(3):
+            self.pos.append(struct.unpack('>100f', buf.read(400)))
         self.rpy = struct.unpack('>100f', buf.read(400))
         self.q_knee = struct.unpack('>100f', buf.read(400))
         self.q_hip = struct.unpack('>100f', buf.read(400))
@@ -59,7 +62,7 @@ class test_signal_sequence_lcmt(object):
     _hash = None
     def _get_hash_recursive(parents):
         if test_signal_sequence_lcmt in parents: return 0
-        tmphash = (0x6f00e04668c1232c) & 0xffffffffffffffff
+        tmphash = (0x3acb24f475895c71) & 0xffffffffffffffff
         tmphash  = (((tmphash<<1)&0xffffffffffffffff) + (tmphash>>63)) & 0xffffffffffffffff
         return tmphash
     _get_hash_recursive = staticmethod(_get_hash_recursive)
