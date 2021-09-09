@@ -7,7 +7,7 @@ cd scripts
 ### Build publisher
 
 ```
-g++ -o publisher.cpp -llcm
+g++ -o publisher.o publisher.cpp -llcm
 ```
 
 ### Run publisher
