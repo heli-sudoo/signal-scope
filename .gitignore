@@ -5,4 +5,8 @@
 /build
 /externals/build
 .vscode
+/exercises/lcm-types/cpp
+/exercises/lcm-types/java
+/exercises/lcm-types/python
+*.o
 
