@@ -38,7 +38,7 @@
 #include <cstdio>
 #include <limits>
 
-Q_DECLARE_METATYPE(PythonQtObjectPtr);
+// Q_DECLARE_METATYPE(PythonQtObjectPtr);
 
 class MainWindow::Internal : public Ui::MainWindow
 {
@@ -253,7 +253,7 @@ PythonSignalHandler* MainWindow::addPythonSignal(PlotWidget* plot, QVariant sign
   }
 
   QString channel = signalDataList[0].toString();
-  PythonQtObjectPtr callback = signalDataList[1].value<PythonQtObjectPtr>();
+  PythonQtObjectPtr callback = signalDataList[1].value<PythonQtSafeObjectPtr>();
   QString fieldName = signalDataList[2].toString();
 
   SignalDescription signalDescription;
