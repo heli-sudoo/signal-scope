@@ -15,7 +15,7 @@ def loadMessageTypes(typesDict, typesName):
         if hasattr(value, '_get_packed_fingerprint'):
             _messageTypes[value._get_packed_fingerprint()] = value
 
-    print 'Loaded %d lcm message types from: %s' % (len(_messageTypes) - originalSize, typesName)
+    print('Loaded %d lcm message types from: %s' % (len(_messageTypes) - originalSize, typesName))
 
 
 def findLCMModules(searchDir):
@@ -29,7 +29,7 @@ def findLCMModules(searchDir):
             try:
                 module = __import__(moduleName)
             except ImportError:
-                print traceback.format_exc()
+                print(traceback.format_exc())
 
             sys.path.pop(0)
             loadMessageTypes(module.__dict__, module.__name__)
@@ -52,7 +52,7 @@ def findLCMModulesInSysPath():
         for searchDir in sys.path:
             findLCMModules(searchDir)
     except:
-        print traceback.format_exc()
+        print(traceback.format_exc())
 
 findLCMModulesInSysPath()
 
