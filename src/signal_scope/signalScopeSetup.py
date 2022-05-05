@@ -130,7 +130,7 @@ class LookupHelper(object):
 def createSignalFunction(timeLookup, valueLookup):
     t = timeLookup._getResolverFunction()
     v = valueLookup._getResolverFunction()
-
+    
     def func(msg):
         if type(t(msg))==tuple:
             return tuple(ti*1e-6 for ti in t(msg)), v(msg)

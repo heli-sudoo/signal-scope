@@ -31,7 +31,6 @@ public:
     double signalValue;
     QVector<double> timeSeq;
     QVector<double> signalSeq;
-
     if (!mDescription.mSignalSeq) // if a signal, append it to the list
     {
       bool valid = this->extractSignalData(message, timeNow, signalValue);

@@ -70,7 +70,6 @@ Use `GIT_TAG GIT_TAG patched-9` for `PythonQt`
 
 Use `GIT_TAG add-qt5-support` for `ctkPythonConsole`
 
-
 Go to `src/signal_scope`, modify `CMakelists.txt` as follows
 
 Change
