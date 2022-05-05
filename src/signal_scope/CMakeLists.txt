@@ -1,6 +1,7 @@
 if("${USED_QTVERSION}" STREQUAL "5")
   find_package(Qt5 REQUIRED Core Gui Script Widgets)
   set(QT_LIBRARIES Qt5::Core Qt5::Gui Qt5::Script Qt5::Widgets)
+  set(QT_INCLUDE_DIR ${Qt5Widgets_INCLUDE_DIRS} ${Qt5Script_INCLUDE_DIRS})
   # Compatibility macros
   macro(qt4_wrap_cpp)
     qt5_wrap_cpp(${ARGN})
@@ -17,9 +18,8 @@ if("${USED_QTVERSION}" STREQUAL "5")
     find_library(QWT_LIBRARY qwt-qt5)
   endif()
 else()
-  find_library(QWT_LIBRARY qwt)
-  find_package(Qt4 REQUIRED QtCore QtGui QtScript)
-  include(${QT_USE_FILE})
+  find_library(QWT_LIBRARY qwt-qt)
+  find_package(Qt4 REQUIRED)
 endif()
 find_package(LCM REQUIRED)
 
@@ -42,6 +42,7 @@ find_path(QWT_INCLUDE_DIR qwt/qwt.h HINTS /usr/local/lib)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${QWT_INCLUDE_DIR})
 include_directories(${LCM_INCLUDE_DIRS})
+include_directories(${QT_INCLUDE_DIR})
 
 if(USE_PYTHON)
 
@@ -58,7 +59,7 @@ if(USE_PYTHON)
     set(PYTHON_LIBRARY ${python_prefix}/lib/libpython2.7${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
 
-  find_package(PythonLibs 2.7 REQUIRED)
+  find_package(PythonLibs 2 REQUIRED)
   find_package(PythonQt REQUIRED)
   find_package(CTKPythonConsole REQUIRED)
 
@@ -76,7 +77,7 @@ if(USE_PYTHON)
   set(python_srcs)
 endif()
 
-qt4_wrap_cpp(moc_srcs
+qt5_wrap_cpp(moc_srcs
   mainwindow.h
   plot.h
   plotwidget.h
@@ -88,13 +89,13 @@ qt4_wrap_cpp(moc_srcs
   ${python_moc_srcs}
   )
 
-qt4_wrap_ui(ui_srcs
+qt5_wrap_ui(ui_srcs
   mainwindow.ui
   setscaledialog.ui
   selectsignaldialog.ui
   )
 
-qt4_add_resources(resource_srcs
+qt5_add_resources(resource_srcs
   resources.qrc
   )
 

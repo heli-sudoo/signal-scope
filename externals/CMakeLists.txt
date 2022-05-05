@@ -34,11 +34,9 @@ set(default_cmake_args
   "-DENABLE_TESTING:BOOL=OFF"
   )
 
-# Find required external dependencies
-find_package(Qt4 4.8 REQUIRED)
 
 set(qt_args
-  -DQT_QMAKE_EXECUTABLE:PATH=${QT_QMAKE_EXECUTABLE}
+  -DQt5_DIR:PATH=${home}/Qt/5.12.2/gcc_64/lib/cmake/Qt5
   )
 
 if(APPLE)
@@ -54,14 +52,16 @@ if(APPLE)
   set(PYTHON_LIBRARY ${python_prefix}/lib/libpython2.7${CMAKE_SHARED_LIBRARY_SUFFIX})
 endif()
 
-find_package(PythonLibs 2.7 REQUIRED)
+find_package(PythonLibs 2 REQUIRED)
+
+message(STATUS "python include dir: ${PYTHON_INCLUDE_DIRS}")
+message(STATUS "python library dir: ${PYTHON_PYTHON_LIBRARIES}")
 
 set(python_args
-  -DPYTHON_INCLUDE_DIR:PATH=${PYTHON_INCLUDE_DIR}
-  -DPYTHON_INCLUDE_DIR2:PATH=${PYTHON_INCLUDE_DIR}
-  -DPYTHON_LIBRARY:PATH=${PYTHON_LIBRARY}
+  -DPYTHON_INCLUDE_DIR:PATH=${PYTHON_INCLUDE_DIRS}
+  -DPYTHON_INCLUDE_DIR2:PATH=${PYTHON_INCLUDE_DIRS}
+  -DPYTHON_LIBRARY:PATH=${PYTHON_LIBRARIES}
   )
-
 
 ###############################################################################
 # lcm
@@ -84,7 +84,7 @@ endif()
 # PythonQt
 ExternalProject_Add(PythonQt
   GIT_REPOSITORY https://github.com/commontk/PythonQt.git
-  GIT_TAG 3da6dcb
+  GIT_TAG patched-9
   CMAKE_CACHE_ARGS
     ${default_cmake_args}
     ${qt_args}
@@ -99,7 +99,7 @@ ExternalProject_Add(PythonQt
 # ctkPythonConsole
 ExternalProject_Add(ctkPythonConsole
   GIT_REPOSITORY https://github.com/patmarion/ctkPythonConsole
-  GIT_TAG 15988c5
+  GIT_TAG add-qt5-support
   CMAKE_CACHE_ARGS
     ${default_cmake_args}
     ${qt_args}

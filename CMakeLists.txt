@@ -18,5 +18,6 @@ endif()
 option(USE_BUILTIN_LCMTYPES "Compile builtin LCM types" ${use_builtin_lcmtypes_default})
 option(USE_PYTHON "Enable Python support." ON)
 
+set(USED_QTVERSION 5)
 add_subdirectory(src/signal_scope)
 
