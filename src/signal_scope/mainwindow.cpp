@@ -24,6 +24,7 @@
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QTimer>
+#include <QMetaType>
 
 #include "qjson.h"
 
@@ -37,6 +38,7 @@
 #include <cstdio>
 #include <limits>
 
+Q_DECLARE_METATYPE(PythonQtObjectPtr);
 
 class MainWindow::Internal : public Ui::MainWindow
 {
