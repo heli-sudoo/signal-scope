@@ -45,7 +45,7 @@ Qt5
 
 To work with Qt5 and Ubuntu20.04
 
-    sudo apt-get install python-dev-is-python3(2) qtbase5-dev qtscript5-dev qttools5-dev qtmultimediat5-dev libqwt-qt5-dev qtbase5-private-dev
+    sudo apt-get install python-dev-is-python2 qtbase5-dev qtscript5-dev qttools5-dev qtmultimediat5-dev libqwt-qt5-dev qtbase5-private-dev
 
 Modify top `CMakelists.txt`
 
@@ -65,6 +65,7 @@ To
 
     set(qt_args -DQt5_DIR:PATH=${home}/Qt/5.12.2/gcc_64/lib/cmake/Qt5)
 
+Note: you may need to replace `${home}/Qt/5.12.2/gcc_64/lib/cmake/Qt5` with your Qt directory that contains the `Qt5Config.cmake` file.
 
 Use `GIT_TAG GIT_TAG patched-9` for `PythonQt`
 
